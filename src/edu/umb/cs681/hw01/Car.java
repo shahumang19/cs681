@@ -61,4 +61,10 @@ public class Car {
                 ", price=" + price +
                 '}';
     }
+
+    public static void main(String[] args) {
+        Car car = new Car("Mercedes", "A-Class", 2022, 25, 34000.0F);
+
+        System.out.println(car);
+    }
 }
