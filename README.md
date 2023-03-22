@@ -5,3 +5,4 @@ ant -f hw02.xml </br>
 ant -f hw03.xml </br>
 ant -f hw04.xml </br>
 ant -f hw05.xml </br>
+ant -f hw06.xml </br>
