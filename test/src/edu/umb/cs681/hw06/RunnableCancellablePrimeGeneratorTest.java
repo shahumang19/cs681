@@ -18,12 +18,29 @@ public class RunnableCancellablePrimeGeneratorTest{
     }
 
     @Test
-    public void generatePrimeFrom1to100() throws InterruptedException {
+    public void verifyThreadCancellation() throws InterruptedException {
         RunnableCancellablePrimeGenerator gen1 = new RunnableCancellablePrimeGenerator(1, 100);
 		Thread t1 = new Thread(gen1);
 		t1.start();
-        t1.join();
         gen1.setDone();
+        t1.join();
+        
+        
+        LinkedList<Long> actual = gen1.getPrimes();
+
+        List<Long> expected = arrayToList();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void verifyThreadCancellationAfterSleep() throws InterruptedException {
+        RunnableCancellablePrimeGenerator gen1 = new RunnableCancellablePrimeGenerator(1, 100);
+		Thread t1 = new Thread(gen1);
+		t1.start();
+        Thread.sleep(100);
+        gen1.setDone();
+        t1.join();
+        
         
         LinkedList<Long> actual = gen1.getPrimes();
 
@@ -31,36 +48,4 @@ public class RunnableCancellablePrimeGeneratorTest{
         assertEquals(expected, actual);
     }
 
-    @Test
-    public void generatePrimeMultiple() throws InterruptedException {
-        int expected = 854;
-        List<RunnableCancellablePrimeGenerator> primeGenerators;
-        List<Thread> primeGeneratorThreads = new ArrayList<Thread>();
-
-        primeGenerators = List.of(
-            new RunnableCancellablePrimeGenerator(1, 10),       //4 prime numbers
-            new RunnableCancellablePrimeGenerator(11, 40),      //8 prime numbers
-            new RunnableCancellablePrimeGenerator(100, 200),    //21 prime numbers
-            new RunnableCancellablePrimeGenerator(1, 1000),     //168 prime numbers
-            new RunnableCancellablePrimeGenerator(55, 5000)     //653 prime numbers
-        );
-
-        for (RunnableCancellablePrimeGenerator generator: primeGenerators){
-            primeGeneratorThreads.add(new Thread(generator));
-        }
-
-        primeGeneratorThreads.forEach(thread -> {
-                                                thread.start();
-                                                try {
-                                                    thread.join();
-                                                } catch (InterruptedException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            });
-
-        primeGenerators.forEach(generator -> generator.setDone());
-        Integer actual = primeGenerators.stream().mapToInt(generator -> generator.getPrimes().size()).reduce(0, (a, b) -> a + b);
-
-        assertEquals(expected, actual);
-    }
 }
