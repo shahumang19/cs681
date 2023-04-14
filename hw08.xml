@@ -4,7 +4,7 @@
 
      on a shell. 
 -->
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="SingletonFileSystem" basedir="."  default="clean">	
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="Interruptible" basedir="."  default="clean">	
 	<property name="src" location="src" />
 	<property name="bin" location="bin" />
 	<property name="test.src" location="test/src" />
