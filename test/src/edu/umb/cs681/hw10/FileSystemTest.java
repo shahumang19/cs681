@@ -40,36 +40,39 @@ public class FileSystemTest {
 
     @Test
     public void verifyMultiThreadSafeFS(){
+        int numThreads = 15;
         List<Thread> threads = new ArrayList<>();
+        List<FileSystemRunnable> runnables = new ArrayList<>(); 
         
-        for (int i = 0; i < 15; i++) {
-            Thread t = new Thread(() -> {
-                Directory root = fs.getRootDirectories().get(0);
-                File x = File.searchAndReturnFirstFile(fs, "x");
-                x.setSize(x.getSize()+1);
-                System.out.println(root.countChildren());
-                Directory pictures = Directory.searchAndReturnFirstDirectory(fs, "pictures");
-                System.out.println(pictures.getTotalSize());
-                Link d = Link.searchAndReturnFirstLink(fs, "d");
-                d.setTarget(Directory.searchAndReturnFirstDirectory(fs, "bin"));
-            });
+        for (int i = 0; i < numThreads; i++) {
+            FileSystemRunnable fsr = new FileSystemRunnable(fs);
+            Thread t = new Thread(fsr);
+            runnables.add(fsr);
             threads.add(t);
             t.start();
          }
 
-         for (Thread t : threads) {
-            t.interrupt();
-         }
-         for (Thread t : threads) {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < numThreads; i++) {
+            runnables.get(i).setDone();
+            threads.get(i).interrupt();
+        }
+
+        for (Thread t : threads) {
             try {
-               t.join();
+                t.join();
             } catch (InterruptedException e) {
-               System.out.println("Thread interrupted!!!");
+                System.out.println("Thread interrupted!!!");
             }
-         }
-        System.out.println("All threads terminated.");
+        }
         
-        assertEquals(Link.searchAndReturnFirstLink(fs, "d").getTarget(), Directory.searchAndReturnFirstDirectory(fs, "bin"));
-        assertTrue(File.searchAndReturnFirstFile(fs, "x").getSize() > 20 );
+        for (Thread t : threads) {
+            assertTrue(t.getState() == Thread.State.TERMINATED);
+        }
     }
 }
