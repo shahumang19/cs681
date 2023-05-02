@@ -29,7 +29,7 @@ public class RunnableCancellableInterruptiblePrimeFactorizerTest{
         
         LinkedList<Long> actual = gen.getPrimeFactors();
         
-        List<Long> expected = arrayToList(7);
+        List<Long> expected = arrayToList();
         assertEquals(expected, actual);
     }
 
@@ -52,7 +52,7 @@ public class RunnableCancellableInterruptiblePrimeFactorizerTest{
         actual.addAll(gen2.getPrimeFactors());
         
         // Real output should be 2, 7, 61 but with interruption 2
-        List<Long> expected = arrayToList(2);
+        List<Long> expected = arrayToList();
 
         assertEquals(expected, actual);
         

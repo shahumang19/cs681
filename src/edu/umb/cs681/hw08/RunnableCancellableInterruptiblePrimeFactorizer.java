@@ -25,9 +25,14 @@ public class RunnableCancellableInterruptiblePrimeFactorizer
 	public void generatePrimeFactors(){
 		long divisor = from;
 
-	    while(!done && dividend != 1 && divisor <= to ){
+	    while(dividend != 1 && divisor <= to ){
             this.lock.lock();
             try{
+				if(this.done){
+                    System.out.println("Stopped generating prime factors.");
+                    this.factors.clear();
+                    break;
+                }
                 if( divisor > 2 && isEven(divisor)) {
                     divisor++;
                     continue;
