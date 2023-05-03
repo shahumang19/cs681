@@ -37,8 +37,8 @@ public record Position(double latitude, double longitude, double altitude) {
             return false;
         }
         Position other = (Position) obj;
-        return Double.compare(latitude, other.latitude) == 0 
-                && Double.compare(longitude, other.longitude) == 0 
-                && Double.compare(altitude, other.altitude) == 0;
+        return Double.compare(Math.round(latitude*100)/100, Math.round(other.latitude*100)/100) == 0 
+                && Double.compare(Math.round(longitude*100)/100, Math.round(other.longitude*100)/100) == 0 
+                && Double.compare(Math.round(altitude*100)/100, Math.round(other.altitude*100)/100) == 0;
     }
 }
