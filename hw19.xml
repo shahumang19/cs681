@@ -1,0 +1,64 @@
+<!-- To run this build script, type: 
+
+     ant -f hw19.xml
+
+     on a shell. 
+-->
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="ConcurrentLinkedQueue" basedir="."  default="clean">	
+	<property name="src" location="src" />
+	<property name="bin" location="bin" />
+	<property name="test.src" location="test/src" />
+	<property name="test.bin" location="test/bin" />
+	<property name="ivy.lib" value="lib"/>
+	
+	<path id="classpath">
+		<pathelement location="${bin}" />
+		<pathelement location="${test.bin}" />
+		<fileset dir="${ivy.lib}"/>
+	</path>
+
+	<target name="init">
+		<mkdir dir="${bin}"/>
+		<mkdir dir="${test.bin}"/>
+		<mkdir dir="${ivy.lib}"/>
+		<echo message="CLASSPATH: ${toString:classpath}" />
+	</target>
+
+	<target name="resolve" depends="init">
+		<ivy:retrieve/>
+	</target>
+	
+	<target name="compile" depends="resolve">
+		<javac srcdir="${src}" destdir="${bin}" includeAntRuntime="no">
+			<classpath refid="classpath"/>
+			 	<include name="edu/umb/cs681/hw19/*.java"/>
+		</javac>
+
+		<javac srcdir="${test.src}" destdir="${test.bin}" includeAntRuntime="no">
+			<classpath refid="classpath"/>
+			 	<include name="edu/umb/cs681/hw19/*.java"/>
+		</javac>
+	</target>
+
+	<target name="run" depends="test">
+    <java classname="edu.umb.cs681.hw19.StockQuoteObservable" classpathref="classpath" fork="true"/>
+	</target>
+
+	<target name="test" depends="compile">
+		<junitlauncher haltOnFailure="true" printSummary="true">
+			<classpath refid="classpath"/>
+			<testclasses outputdir="test">
+				<fileset dir="${test.bin}">
+					<include name="edu/umb/cs681/hw19/*Test.class"/>
+				</fileset>
+				<listener type="legacy-plain" sendSysOut="true"/>
+	        </testclasses>
+		</junitlauncher>
+	</target>
+	
+	<target name="clean" depends="run">
+		<delete includeemptydirs="true">
+			<fileset dir="${bin}/edu/umb/cs681/hw19/" includes="**/*"/>
+		</delete>
+	</target>
+</project>
