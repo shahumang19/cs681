@@ -26,8 +26,10 @@ public class FileSystemRunnable implements Runnable {
         while (true){
             lock.lock();
             try{
-                if (done) {break;}
-
+                if (done) {
+                    System.out.println(Thread.currentThread().getName() + " - terminated.");
+                    break;
+                }
                 Directory root = fs.getRootDirectories().get(0);
                 File x = File.searchAndReturnFirstFile(fs, "x");
                 x.setSize(x.getSize()+1);
@@ -39,7 +41,11 @@ public class FileSystemRunnable implements Runnable {
             } finally {
                 lock.unlock();
             }
-            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                continue;
+            }
         }
     }
     
