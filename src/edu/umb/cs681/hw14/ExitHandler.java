@@ -17,7 +17,6 @@ class ExitHandler implements Runnable{
     public void run(){
         while (true){
             if (done.get()){
-                System.out.println("Exit Done!!!");
                 break;
             }
             System.out.println(Thread.currentThread().getName() + " - Visitor Exit!!!");
@@ -25,7 +24,7 @@ class ExitHandler implements Runnable{
             try {
                 Thread.sleep(900);
             } catch (InterruptedException e) {
-                System.out.println(Thread.currentThread().getName() + " (exit) Interrupted!!!");
+                continue;
             }
         }
     } 

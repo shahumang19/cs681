@@ -22,10 +22,11 @@ public class RequestHandler implements Runnable  {
             int count = AccessCounter.getInstance().getCount(path);
             AccessCounter.getInstance().increment(path);
             System.out.println(Thread.currentThread().getId() + " accessed " + path + " " + count + " times");
+            
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                continue; 
             }
         }
     }

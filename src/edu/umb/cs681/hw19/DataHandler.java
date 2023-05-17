@@ -19,12 +19,13 @@ public class DataHandler implements Runnable {
     @Override
     public void run() {
         double initialStockPrice = Math.random()*100;
-        while(!done.get()){
+        while(true){
+            if (!done.get()){break;}
             observable.changeQuote(stockName, initialStockPrice + Math.random());
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                System.out.println(Thread.currentThread().getName()+" interrupted!!!");
+                continue;
             }
         }
     }

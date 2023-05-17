@@ -17,7 +17,6 @@ class EntranceHandler implements Runnable{
     public void run(){
         while (true){
             if (done.get()){
-                System.out.println("Entrance Done!!!");
                 break;
             }
             System.out.println(Thread.currentThread().getName() + " - Visitor Entry!!!");
@@ -25,7 +24,7 @@ class EntranceHandler implements Runnable{
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                System.out.println(Thread.currentThread().getName() + " (enter) Interrupted!!!");
+                continue;
             }
         }
     } 

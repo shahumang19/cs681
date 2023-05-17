@@ -26,7 +26,7 @@ public class AccessCounterTest {
         }
 
         for (int i = 0; i < threadCount; i++) {
-            assertTrue(threads[i].isInterrupted());
+            assertTrue(threads[i].getState() == Thread.State.TERMINATED);
         }
     }
 }

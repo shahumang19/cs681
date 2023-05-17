@@ -53,12 +53,16 @@ public abstract class Observable<T> {
 	}
 
 	public void notifyObservers(T event) {
+		LinkedList<Observer<T>> observersLocal = new LinkedList<>();
 		lockObs.lock();
 		try{
-			observers.forEach( (observer)->{observer.update(this, event);} );
+			observersLocal = observers;
 		}finally{
 			lockObs.unlock();
 		}
+
+		observersLocal.forEach( (observer)->{observer.update(this, event);} );
+
 	}
 	
 }

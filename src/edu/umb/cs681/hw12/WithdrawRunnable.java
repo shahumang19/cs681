@@ -16,12 +16,14 @@ public class WithdrawRunnable implements Runnable{
 	}
 	
 	public void run(){
-		try{
-			for(int i = 0; i < 10; i++){
-				if (this.done.get()){break;}
-				account.withdraw(100);
+		for(int i = 0; i < 10; i++){
+			if (this.done.get()){break;}
+			account.withdraw(100);
+			try{
 				Thread.sleep( Duration.ofSeconds(2) );
+			}catch(InterruptedException e){
+				continue;
 			}
-		}catch(InterruptedException exception){}
+		}
 	}
 }

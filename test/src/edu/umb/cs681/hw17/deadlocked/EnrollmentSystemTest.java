@@ -7,23 +7,24 @@ public class EnrollmentSystemTest {
     
     @Test
     public void verifyMultipleRequestHandlers(){
-        EnrollmentSystem system = new EnrollmentSystem();
+        Student student1 = new Student("Alice");
+        Student student2 = new Student("Bob");
 
-        Thread student1 = new Thread(() -> {
-            system.enrollForSubjectA("Student1");
-        });
+        Subject cs681 = new Subject("CS681");
+        Subject cs682 = new Subject("CS682");
 
-        Thread student2 = new Thread(() -> {
-            system.enrollForSubjectB("Student2");
-        });
+        // Create threads for enrolling
+        Thread thread1 = new Thread(() -> student1.enroll(cs681, cs682));
+        Thread thread2 = new Thread(() -> student2.enroll(cs682, cs681));
 
-        student1.start();
-        student2.start();
+        // Start the threads
+        thread1.start();
+        thread2.start();
 
         long startTime = System.currentTimeMillis();
         long timeout = 5000; // 5 seconds
 
-        while (student1.isAlive() || student2.isAlive()) {
+        while (thread1.isAlive() || thread2.isAlive()) {
             if (System.currentTimeMillis() - startTime > timeout) {
                 System.out.println("Deadlock Occurred. Timeout reached. Exiting program.");
                 break;
@@ -35,7 +36,7 @@ public class EnrollmentSystemTest {
             }
         }
 
-        assertTrue(student1.getState() == Thread.State.WAITING);
-        assertTrue(student2.getState() == Thread.State.WAITING);
+        assertTrue(thread1.getState() == Thread.State.WAITING);
+        assertTrue(thread2.getState() == Thread.State.WAITING);
     }
 }

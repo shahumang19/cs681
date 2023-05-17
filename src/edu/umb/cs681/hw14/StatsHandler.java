@@ -17,14 +17,13 @@ class StatsHandler implements Runnable{
     public void run(){
         while (true){
             if (done.get()){
-                System.out.println("Stats Done!!!");
                 break;
             }
             System.out.println(Thread.currentThread().getName() + " - Current Count : " + monitor.countCurrentVisitors());
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                System.out.println(Thread.currentThread().getName() + " (stats) Interrupted!!!");
+                continue;
             }
         }
     } 

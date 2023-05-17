@@ -18,12 +18,16 @@ public class AuctionHandler implements Runnable {
 
     @Override
     public void run() {
-        while(!done.get()){
+        while(true){
+            if (done.get()){
+                System.out.println(Thread.currentThread().getName()+" Done!!!");
+                break;
+            }
             item.placeBid(user, item.getCurrentBid()+Math.random()*100);
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                System.out.println(Thread.currentThread().getName()+" Interrupted!!!");
+                continue;
             }
         }
     }
